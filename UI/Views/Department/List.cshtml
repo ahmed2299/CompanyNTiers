@@ -1,0 +1,269 @@
+﻿@model List<DAL.ViewModel.Department.DepartmentListViewModel>
+
+@{
+    var messageFromViewBag = ViewBag.Error;
+}
+
+<div class="divBodyList">
+
+    <table class="table table-bordered table-hover text-center">
+        <thead>
+            <tr>
+                <th>Department Name</th>
+                <th>Department Number</th>
+                <th>Budget</th>
+                <th>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                            data-bs-target="#AddModal" id="btnAddDepartment">
+                        Add
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.DepartmentName</td>
+                    <td>@item.DepartmentNumber</td>
+                    <td>@item.Budget</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                data-bs-target="#ViewModal" id="btnViewDepartment"
+                                onclick="ViewDepartmentClick(@item.DepartmentId)">
+                            View
+                        </button>
+                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
+                                data-bs-target="#EditModal" id="btnEditDepartment"
+                                onclick="EditDepartmentClick(@item.DepartmentId)">
+                            Edit
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                data-bs-target="#DeleteModal" id="btnDeleteDepartment"
+                                onclick="DeleteDepartmentClick(@item.DepartmentId)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- View Modal -->
+<div class="modal fade" id="ViewModal" tabindex="-1" aria-labelledby="ViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ViewModalLabel">View Department</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="bodyView">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="AddModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="AddModalLabel">Add Department</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="bodyAdd">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn-primary" id="btnAddSubmit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="EditModalLabel">Edit Department</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="bodyEdit">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn-primary" id="btnSubmitEdit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="DeleteModalLabel">Delete Department</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="bodyDelete">
+                Are You Sure?!
+                <p class="text-danger" id="lblErrorMessageDelete"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a class="btn btn-primary" id="btnSubmitDelete">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+
+    <script>
+        function DeleteDepartmentClick(id) {
+            document.getElementById("lblErrorMessageDelete").innerHTML = "";
+            $("#btnSubmitDelete").click(function () {
+                debugger;
+                $.ajax({
+                    method: "GET",
+                    url: "Department/Delete",
+                    data: { id: id },
+                    contenttype: 'application/json',
+                    success: function (result) {
+                        debugger;
+                        if (result.result == 'There is an error while deleting department information') {
+                            debugger;
+                            $("#lblErrorMessageDelete").html(result.result)
+                        }
+                        else {
+                            debugger;
+                            location.reload(true)
+                        }
+                    },
+                    error: function (xhr, status, result) {
+                        debugger;
+                        location.reload(true)
+                        $("#lblErrorMessageDelete").html(result.result)
+                    }
+                })
+            })
+        }
+    </script>
+
+    <script>
+        function collectModalButtons(operationtype, id) {
+            if (operationtype == "add") {
+                addButton();
+            }
+            else {
+                EditButton(id);
+            }
+        }
+
+        function addButton() {
+            $("#btnAddSubmit").click(function () {
+                var DepartmentData = {
+                    DepartmentName: $("#txtDepartmentName").val(),
+                    DepartmentNumber: $("#txtDepartmentNumber").val() != '' ? parseInt($("#txtDepartmentNumber").val()) : 0,
+                    Budget: $("#txtBudget").val() != '' ? parseFloat($("#txtBudget").val()) : 0
+                }
+                var jsonData = JSON.stringify(DepartmentData);
+                $.ajax({
+                    type: "POST",
+                    url: "Department/Add",
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function (result) {
+                        if (result.result != null) {
+                            $("#lblErrorMessageAdd").html(result.result)
+                        }
+                        else {
+                            location.reload(true);
+                        }
+                    },
+                    error: function (xhr, status, result) {
+                        $("#lblErrorMessageAdd").html(result.result)
+                    }
+                })
+            });
+        }
+
+        function EditButton(id) {
+            $("#btnSubmitEdit").click(function () {
+                var DepartmentData = {
+                    DepartmentId: id,
+                    DepartmentName: $("#txtDepartmentNameEdit").val(),
+                    DepartmentNumber: $("#txtDepartmentNumberEdit").val() != '' ? parseInt($("#txtDepartmentNumberEdit").val()) : 0,
+                    Budget: $("#txtBudgetEdit").val() != '' ? parseFloat($("#txtBudgetEdit").val()) : 0
+                }
+
+                var jsonData = JSON.stringify(DepartmentData);
+                $.ajax({
+                    type: "POST",
+                    url: "Department/Edit",
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function (result) {
+                        if (result.result != null) {
+                            $("#lblErrorMessageEdit").html(result.result)
+                        }
+                        else {
+                            location.reload(true);
+                        }
+                    },
+                    error: function (xhr, status, result) {
+                        $("#lblErrorMessageEdit").html(result.result)
+                    }
+                })
+            })
+        }
+
+        function EditDepartmentClick(id) {
+            $.ajax({
+                method: "GET",
+                url: "Department/Edit",
+                data: { id: id },
+                contenttype: 'application/json',
+                success: function (result) {
+                    $("#bodyEdit").html(result);
+                    collectModalButtons("edit", id);
+                }
+            })
+        }
+
+        function ViewDepartmentClick(id) {
+            $.ajax({
+                method: "GET",
+                url: "Department/View",
+                data: { id: id },
+                contenttype: 'application/json',
+                success: function (result) {
+                    $("#bodyView").html(result);
+                }
+            })
+        }
+
+        $(document).ready(function () {
+            $("#btnAddDepartment").click(function () {
+                $.ajax({
+                    method: "GET",
+                    url: "Department/Add",
+                    contenttype: 'application/json',
+                    success: function (result) {
+                        $("#bodyAdd").html(result);
+                        collectModalButtons("add", 0);
+                    }
+                })
+            })
+
+        });
+    </script>
+}

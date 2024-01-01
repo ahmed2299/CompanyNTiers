@@ -1,0 +1,36 @@
+﻿@model DAL.ViewModel.Department.DepartmentAddViewModel
+
+@{
+    Layout = null;
+}
+
+
+<div id="divAddBody">
+    <div class="row mb-3">
+        <div class="col mx-3">
+            <label for="txtDepartmentName">Department Name</label>
+            <div class="row">
+                @Html.TextBoxFor(Model => Model.DepartmentName, new { @class = "form-control", @id = "txtDepartmentName" })
+            </div>
+        </div>
+        <div class="col mx-3">
+            <label for="txtDepartmentNumber">Department Number</label>
+            <div class="row">
+                @Html.TextBoxFor(Model => Model.DepartmentNumber, new { @class = "form-control", @id = "txtDepartmentNumber" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6 mx-3">
+            <label for="txtBudget">Budget</label>
+            <div class="row">
+                @Html.TextBoxFor(Model => Model.Budget, new { @class = "form-control", @id = "txtBudget" })
+            </div>
+        </div>
+    </div>
+    <p class="text-danger" id="lblErrorMessageAdd">@ViewBag.Error</p>
+</div>
+
+
+

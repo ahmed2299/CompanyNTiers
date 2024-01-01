@@ -1,0 +1,81 @@
+﻿@model DAL.ViewModel.Employee.EmployeeViewViewModel
+
+@{
+    Layout = null;
+}
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col">
+            <label><b>Employee Name:</b> @Model.EmployeeName</label>
+        </div>
+        <div class="col">
+            <label><b>Department Name: </b>@Model.DepartmentName</label>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col">
+            <label><b>Identification Number: </b>@Model.IdentificationNumber</label>
+        </div>
+        <div class="col">
+            <label><b>Mobile Number: </b>@Model.MobileNumber</label>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col">
+            <label><b>Home Number: </b>@Model.HomeNumber</label>
+        </div>
+        <div class="col">
+            <label><b>Work Number: </b>@Model.WorkNumber</label>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col">
+            <label><b>Salary: </b>@Model.Salary</label>
+        </div>
+        <div class="col">
+            <label><b>Code: </b>@Model.Code</label>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col">
+            <label><b>Is Manager: </b></label>
+            @if (Model.IsManager == true)
+            {
+                <img src="~/images/true.png" width="25">
+            }
+            else
+            {
+                <img src="~/images/x-thin.svg" />
+            }
+        </div>
+        <div class="col">
+            <label><b>Is Active: </b></label>
+            @if (Model.IsActive == true)
+            {
+                <img src="~/images/true.png" width="25">
+            }
+            else
+            {
+                <img src="~/images/x-thin.svg" />
+            }
+        </div>
+    </div>
+    <br />
+    <br />
+}
+
+else
+{
+    <p class="text-danger">@ViewBag.Error</p>
+}
+

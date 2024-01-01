@@ -1,0 +1,48 @@
+﻿@model DAL.ViewModel.Department.DepartmentViewViewModel
+
+@{
+    Layout = null;
+}
+
+<div id="divViewBody">
+    <div class="row mb-3">
+        @Html.HiddenFor(Model => Model.DepartmentId, new { @id = "txtDepartmentIdView" })
+        <div class="col mx-3">
+            <label for="txtDepartmentNameView">Department Name</label>
+            <div class="row">
+                @Html.TextBoxFor(Model => Model.DepartmentName, new
+                    {
+                        @class = "form-control",
+                        @id = "txtDepartmentNameView",
+                        @readonly = "readonly"
+                    })
+            </div>
+        </div>
+        <div class="col mx-3">
+            <label for="txtDepartmentNumberView">Department Number</label>
+            <div class="row">
+                @Html.TextBoxFor(Model => Model.DepartmentNumber, new
+                    {
+                        @class = "form-control",
+                        @id = "txtDepartmentNumberView",
+                        @readonly = "readonly"
+                    })
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6 mx-3">
+            <label for="txtBudgetView">Budget</label>
+            <div class="row">
+                @Html.TextBoxFor(Model => Model.Budget, new
+                    {
+                        @class = "form-control",
+                        @id = "txtBudgetView",
+                        @readonly = "readonly"
+                    })
+            </div>
+        </div>
+    </div>
+    <p class="text-danger" id="lblErrorMessageView">@ViewBag.Error</p>
+</div>
